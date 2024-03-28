@@ -4,6 +4,9 @@ import Table from 'react-bootstrap/Table';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { NavLink } from 'react-router-dom';
+import Modal from 'react-bootstrap/Modal';
+
+
 // import Container from 'react-bootstrap/Container';
 
 export default function AddData() {
@@ -12,6 +15,8 @@ export default function AddData() {
         setFormData({...FormData,[e.target.name]:e.target.value})
     }
     const baseUrl = "http://localhost:6005/api/v1/students/";
+    const [show, setShow] = useState(false); // modal hide default
+
     const handleSubmit = (e)=>{
         e.preventDefault()
         
@@ -24,13 +29,15 @@ export default function AddData() {
                 age:''
               });
               fetchInfo();
+              handleClose();
+              setShow(true); // modal show 
         })
         .catch((error) => console.log(error));
     }
 
    
     const [data, setData] = useState([]);
-
+    const handleClose = () => setShow(false); // modal hide onclick 
   const fetchInfo = () => {
     return axios.get(`${baseUrl}all`).then((res) => setData(res.data));
   }
@@ -50,6 +57,20 @@ export default function AddData() {
 
   return (
     <div className='addDatas'>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Student Registration</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Woohoo, you are Successfully Registered..!</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          {/* <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button> */}
+        </Modal.Footer>
+      </Modal>
         <h3 className='stuRegiser'>Student Registration</h3>
         <div className='d-flex justify-content-center'>
             
