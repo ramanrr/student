@@ -16,10 +16,17 @@ export default function AddData() {
     }
     const baseUrl = "http://localhost:6005/api/v1/students/";
     const [show, setShow] = useState(false); // modal hide default
+    const [validated, setValidated] = useState(false);
 
     const handleSubmit = (e)=>{
         e.preventDefault()
-        
+        const form = e.currentTarget;
+        if (form.checkValidity() === false) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+    else{
+        setValidated(true);
         axios.post(`${baseUrl}add-student-details`,FormData)
         .then((response) => {
             console.log(response)
@@ -33,6 +40,8 @@ export default function AddData() {
               setShow(true); // modal show 
         })
         .catch((error) => console.log(error));
+      }
+
     }
 
    
@@ -74,10 +83,10 @@ export default function AddData() {
         <h3 className='stuRegiser'>Student Registration</h3>
         <div className='d-flex justify-content-center'>
             
-        <Form onSubmit={handleSubmit}>
+        <Form noValidate validated={validated} onSubmit={handleSubmit}>
       <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
         {/* <Form.Label>Email address</Form.Label> */}
-        <Form.Control type='text'
+        <Form.Control type='text' required
                 name='name'
                 placeholder='Name'
                 value={FormData.name}
@@ -85,7 +94,7 @@ export default function AddData() {
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         {/* <Form.Label>Email</Form.Label> */}
-        <Form.Control type='email'
+        <Form.Control type='email' required
                 name='email'
                 placeholder='Email'
                 value={FormData.email}
@@ -93,7 +102,7 @@ export default function AddData() {
       </Form.Group>
       <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
         {/* <Form.Label>Age</Form.Label> */}
-        <Form.Control type='text'
+        <Form.Control type='text' required
                 name='age'
                 placeholder='Age'
                 value={FormData.age}
